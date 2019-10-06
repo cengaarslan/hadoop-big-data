@@ -44,7 +44,7 @@ ile Sandbox' terminalden bağlanın
 	3.1. Linux için root ne ise hdfs dünyasında hdfs odur.
 	
 	3.2. Sandbox terminalden hdfs kullanıcısına geçmek için 
-		[root@sandbox-hdp ~]# su hdfs
+		[root@sandbox-hdp ~]# su - hdfs
 		
 	3.3. hdfs dizinlerini listelemek için (Burada /user/maria_dev dizini listeleniyor)
 		
