@@ -1,8 +1,8 @@
-UYGULAMA-1
+﻿UYGULAMA-1
 =====================================================================================================================================
 Bu uyglamada kendi yazdığımız mapreduce kodları ile wordcount uygulaması yapacağız.
 Uygulama bir dosya içindeki kuryemiş isimlerinden hangisinin kaçar tane tekrarlandığını hesaplayarak 
-hdfs'e sonucu yazacaktır.
+sonucu hdfs'e yazacaktır.
 
 
 1.
@@ -20,7 +20,8 @@ Mapreduce kodlarını yaz.
 
 3.
 Intellij üzerinden jar dosyası oluştur.
-Hazır jar dosyası: https://1drv.ms/f/s!Al2Mr2odzhB_irt1UUjsJf-7-cs7EA
+	Hazır jar dosyası: 
+	https://github.com/erkansirin78/hadoop-big-data/blob/master/03-Hadoop-Temel-Bilesenler/mapreducewordcount/out/artifacts/mapreduce_wordcount_jar/mapreduce.wordcount.jar
 
 4. 
 jar dosyasını ana makineden sanal makineye kopyala (WinSCP uygulaması kullanılabilir)
@@ -31,7 +32,9 @@ jar dosyasını ana makineden sanal makineye kopyala (WinSCP uygulaması kullan�
 
 5.
 word count yapılacak text dosyasını hdfs'e kopyala
-kuruyemisler.txt dosyası https://raw.githubusercontent.com/erkansirin78/preprocessing-analysis-ml-dl-big-data/master/14_big_data/03-Hadoop-Temel-Bilesenler/mapreducewordcount/kaynaklar/kuruyemisler.txt
+kuruyemisler.txt dosyası 
+https://raw.githubusercontent.com/erkansirin78/hadoop-big-data/master/03-Hadoop-Temel-Bilesenler/mapreducewordcount/kaynaklar/kuruyemisler.txt
+
 	Önce hdfs'te bir dizin oluştur
 	[maria_dev@sandbox-hdp ~]$ hdfs dfs -mkdir /user/maria_dev/kuruyemis
 	[maria_dev@sandbox-hdp ~]$ hdfs dfs -put /home/maria_dev/mapreducewordcount_jar/kuruyemisler.txt /user/maria_dev/kuruyemis
@@ -135,7 +138,7 @@ YER FISTIĞI     1866
 UYGULAMA-2
 =====================================================================================================================================
 Bu uygulama HDP dağıtımı içinde hazır bulunan jar dosyasını çalıştırmak olacak 
-[maria_dev@sandbox-hdp ~]$ hadoop jar /usr/hdp/2.6.4.0-91/hadoop-mapreduce/hadoop-mapreduce-examples.jar pi 20 20
+[maria_dev@sandbox-hdp ~]$ hadoop jar /usr/hdp/current/hadoop-mapreduce/hadoop-mapreduce-examples.jar pi 20 20
 
 Beklenen çıktı:
 Number of Maps  = 20

@@ -7,15 +7,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f3a85d2a-7e9c-4bbf-85a5-fdcec9bfac20" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../02_HDFS_uygulama_temel_komutlar.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../02_HDFS_uygulama_temel_komutlar.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/MR2WordCount_jar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/user.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sbt.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sbt.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../06_map_reduce_uygulama.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../06_map_reduce_uygulama.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../07_ödev.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/META-INF/mapreducewordcount.kotlin_module" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/veribilimiokulu/mapreduce/MR2WordCount.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/veribilimiokulu/mapreduce/MR2WordCount.class" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -80,7 +74,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>

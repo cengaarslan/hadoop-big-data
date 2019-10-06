@@ -1,0 +1,37 @@
+BÖLÜM -2 ÖDEV
+===================
+
+1. Sandbox içinde "mehmet" isminde bir kullanıcı ve bu kullanıcıya ait bir home dizin oluşturunuz.
+
+
+2. HDFS üzerinde "mehmet" kullanıcısı için home dizin oluşturunuz.
+
+
+3. Komut satırından hdfs'de "mehmet" kullanıcısının home dizini içinde "data" isminde bir klasör oluşturunuz.
+Bu klasörün;
+	sahipliğini (ownership) mehmet,
+	grubunu (group) hdfs 
+yapınız. 
+
+Aynı klasörün;
+	erişim yetkilerini 755
+yapınız.
+
+4. Komut satırından hdfs'deki /user/mehmet/data dizini içine 
+https://raw.githubusercontent.com/erkansirin78/datasets/master/simple_data.csv
+https://raw.githubusercontent.com/erkansirin78/datasets/master/kuruyemisler.txt
+
+dosyalarını yükleyiniz.
+
+
+5. /user/mehmet/data klasörünü içeriği ile birlikte
+	maria_dev kullanıcısının hdfs home dizininde kopyalayınız.
+	
+6. /user/mehmet/data/simple_data.csv dosyasını linux lokal diskinde /home/maria_dev kullanıcısına kopyalayınız.
+
+7. /user/maria_dev/data klasörünü trash'e taşımadan doğrudan siliniz.
+
+8. Hadoop temel bileşenleri nelerdir? Ne işe yararlar? Açıklayınız?
+
+9. YARN nedir? Açılımı nedir? YARN ile ilgili 5 kavramı listeleyiniz. YARN'a ait servislerden hangileri master sunucularda hangileri slave sunucularda çalışır?
+
