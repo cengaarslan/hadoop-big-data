@@ -26,12 +26,15 @@ beeline -u jdbc:hive2://localhost:10000
 
 	6.1. describe <database_name>
 
-	6.2. 
+	6.2. Beeline çıkış:
+!quit
+
 
 7. Kuyruk adı belirterek hive sorgusu çalıştırmak (kuyruk yarn üzerinde tanımlı olmalıdır)
 Sorgu dan önce 
  jdbc:hive2://localhost:10000> set tez.queue.name=hive;
 
+ Bunu mapreduce için yapamayız. Runtime esnasında mümkün değil.
 
 8. Sorgu:
 0: jdbc:hive2://localhost:10000>  select workclass, COUNT(*) FROM `default`.adult_preprocessed GROUP by workclass;

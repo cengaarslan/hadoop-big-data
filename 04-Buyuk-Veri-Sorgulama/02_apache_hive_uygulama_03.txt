@@ -93,6 +93,7 @@ select * from simple_data;
 set hive.cli.print.header = true;
 
 		komutunu çalıştırmalıyız.
+		İstersek bu konfigürasyon değişikliğini Ambari üzerinden kalıcı olarakk değiştirebiliriz.
 
 		Şimdi select sorgusunu tekrar deneyelim.
 
