@@ -19,6 +19,7 @@ create table if not exists social_media (KullaniciID int, Cinsiyet string, Yas i
 
 load data local inpath '/home/maria_dev/SosyalMedyaReklamKampanyasi.csv' overwrite into table social_media;
 
+set hive.cli.print.header=true;
 
 select * from social_media limit 5;
 	
@@ -29,10 +30,12 @@ select * from social_media limit 5;
 	15603246        Kadın   27      57000.0 0
 	15804002        Erkek   19      76000.0 0
 
-ORDER BY, SORT BY, DISTRIBUTED BY, CLUSTER BY
+	ORDER BY, SORT BY, DISTRIBUTED BY, CLUSTER BY
+	===================================================
 
 1. ORDER BY 
-	Tek bir reducer kullanır. Bildiğimiz tam sıralamadır. Ancak bunu yapmak için tek reducer kullanmak zorunda olduğu için zorlanır. Bu yüzden LIMIT ile sınırlandırılmalıdır(strict mode).
+	Tek bir reducer kullanır. Bildiğimiz tam sıralamadır. Ancak bunu yapmak için tek reducer kullanmak zorunda olduğu için zorlanır. 
+	Bu yüzden LIMIT ile sınırlandırılmalıdır(strict mode).
 
 	ORDER BY guarantees total ordering of data, but for that, it has to be passed on to a single reducer, which is normally performance-intensive and therefore in strict mode, hive makes it compulsory to use LIMIT with ORDER BY so that reducer doesn’t get overburdened.
 
@@ -560,12 +563,12 @@ SELECT yas, tahminimaas FROM social_media CLUSTER BY yas;
 
 5. Büyük veri HDFS gibi dosya sistemlerinde parçalara bölünerek saklanır.
 	Saklanan bu veri hive tablosu olsa bile aslında parçalara bölünmüş şekilde saklanan HDFS verisidir.
-	Peki biz bu parçaları rastgele geğil de işimize yarayacak şekilde saklasak. Örneğin İç Anadolu Bölgesi'ne ait tüm 
+	Peki biz bu parçaları rastgele değil de işimize yarayacak şekilde saklasak. Örneğin İç Anadolu Bölgesi'ne ait tüm 
 	kayıtlar aynı parçada olsa. İç Anadolu Bölgesi ile ilgili sorgulara daha hızlı yanıt vermez miyim? Çünkü biliyorum ki x parçasından başkasında İç Anadolu Bölgesi yok. öyleyse diğer parçaları işlemeden cevabımı tek bir parçaya dayanarak verebileceğim. Bu bana avantaj sağlayacaktır.
 
 	Bu aşamada 
 	https://raw.githubusercontent.com/erkansirin78/datasets/master/hive/personel_salaries.txt
-	adresindeki retail_db tabloları kullanılacaktır.
+	verisi kullanılacaktır.
 
 
 	[maria_dev@sandbox-hdp ~]$  ile
@@ -596,8 +599,11 @@ create table if not exists salaries_temp (DepartmentID int, Department string, N
 
 load data local inpath '/home/maria_dev/personel_salaries.txt' overwrite into table salaries_temp;
 
-	6.5. partitioned tablo oluşturma
- create table if not exists salaries_prt (DepartmentID int, Name string, Salary float) partitioned by (Department string) row format delimited fields terminated by ',' lines terminated by '\n' stored as textfile tblproperties('skip.header.line.count'='1');
+	6.5. partitioned tablo oluşturma:
+		Burada () içine partition yapılacak sütun konulmaz. Bu sütun partitioned by ile () dışında belirtilir.
+		Bunun dışında normal tablo yaratma ile aynıdır.
+		
+create table if not exists salaries_prt (DepartmentID int, Name string, Salary float) partitioned by (Department string) row format delimited fields terminated by ',' lines terminated by '\n' stored as textfile tblproperties('skip.header.line.count'='1');
 
  	6.6. Geçici tablodan partitioned tabloya veri yükleme: Dikkat partition olacak sütun(Department) en sonda seçilir
 

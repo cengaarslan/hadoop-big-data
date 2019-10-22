@@ -7,9 +7,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f3a85d2a-7e9c-4bbf-85a5-fdcec9bfac20" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../06_map_reduce_uygulama.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../06_map_reduce_uygulama.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../07_ödev.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../04-Buyuk-Veri-Sorgulama/hive_tablo_olusturma_odev.txt" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -29,10 +28,11 @@
   <component name="ProjectId" id="1RohaHm8oBxNUnU7oZgWbj6qXrh" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
+    <property name="full.screen.before.presentation.mode" value="false" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15471394" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="MavenSettings" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
