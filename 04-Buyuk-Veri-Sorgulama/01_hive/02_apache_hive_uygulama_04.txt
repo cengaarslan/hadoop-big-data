@@ -709,6 +709,70 @@ show partitions salaries_prt;
 wget https://raw.githubusercontent.com/erkansirin78/datasets/master/hive/veri_bilimi.txt
 
 
- beeline -u jdbc:hive2://localhost:10000
+hive
+use azhadoop;
 
- 
+load data local inpath'/home/maria_dev/veri_bilimi.txt' into table salaries_prt partition(Department='VeriBilimi');
+		Loading data to table azhadoop.salaries_prt partition (department=VeriBilimi)
+		Partition azhadoop.salaries_prt{department=VeriBilimi} stats: [numFiles=1, numRows=0, totalSize=102, rawDataSize=0]
+		OK
+		Time taken: 2.442 seconds
+
+11. hdfs'de partition tablo dizinine bir klasör yarattığımızda hive bunu nasıl tanır?
+
+quit;
+	ile hive shell'den çıkılır.
+	
+	11.1. Önce bir dizin yapısını görelim 
+hdfs dfs -ls /apps/hive/warehouse/azhadoop.db/salaries_prt
+		Found 4 items
+		drwxrwxrwx   - maria_dev hadoop          0 2019-10-22 20:01 /apps/hive/warehouse/azhadoop.db/salaries_prt/department=Muhasebe
+		drwxrwxrwx   - maria_dev hadoop          0 2019-10-22 20:01 /apps/hive/warehouse/azhadoop.db/salaries_prt/department=Pazarlama
+		drwxrwxrwx   - maria_dev hadoop          0 2019-10-22 20:01 /apps/hive/warehouse/azhadoop.db/salaries_prt/department=Satis
+		drwxrwxrwx   - maria_dev hadoop          0 2019-10-22 20:26 /apps/hive/warehouse/azhadoop.db/salaries_prt/department=VeriBilimi
+
+	11.2. Şimdi Lojistik adında yeni bir dizin oluşturalım.
+	
+hdfs dfs -mkdir /apps/hive/warehouse/azhadoop.db/salaries_prt/department=Lojistik
+
+hdfs dfs -ls /apps/hive/warehouse/azhadoop.db/salaries_prt
+		Found 5 items
+		drwxr-xr-x   - maria_dev hadoop          0 2019-10-22 20:35 /apps/hive/warehouse/azhadoop.db/salaries_prt/department=Lojistik
+		drwxrwxrwx   - maria_dev hadoop          0 2019-10-22 20:01 /apps/hive/warehouse/azhadoop.db/salaries_prt/department=Muhasebe
+		drwxrwxrwx   - maria_dev hadoop          0 2019-10-22 20:01 /apps/hive/warehouse/azhadoop.db/salaries_prt/department=Pazarlama
+		drwxrwxrwx   - maria_dev hadoop          0 2019-10-22 20:01 /apps/hive/warehouse/azhadoop.db/salaries_prt/department=Satis
+		drwxrwxrwx   - maria_dev hadoop          0 2019-10-22 20:26 /apps/hive/warehouse/azhadoop.db/salaries_prt/department=VeriBilimi
+	
+	görüldüğü gibi eklendi.
+	
+	Şimdi hive shell'e bağlanıp bu parçanın o tarafa gelip gelmediğini kontrol edelim.
+	
+hive
+use azhadoop;
+show partitions salaries_prt;
+		OK
+		department=Muhasebe
+		department=Pazarlama
+		department=Satis
+		department=VeriBilimi
+		Time taken: 0.71 seconds, Fetched: 4 row(s)
+
+
+	Gördüğümüz gibi gelmedi. Çünkü hdfs'te yaptığımızdan hive'ı haberi yok. Yani metadata gerçek veri ile uyumlu değil.
+	Bu durumu düzeltmenin iki yolu var: 1. Yukarıdaki gibi elle 2. komut ile 2. yolu deneyelim. 
+
+msck repair table salaries_prt;
+		OK
+		Partitions not in metastore:    salaries_prt:department=Lojistik
+		Repair: Added partition to metastore salaries_prt:department=Lojistik
+		Time taken: 0.749 seconds, Fetched: 2 row(s)
+
+	Kontrol:
+show partitions salaries_prt;
+		OK
+		department=Lojistik
+		department=Muhasebe
+		department=Pazarlama
+		department=Satis
+		department=VeriBilimi
+		Time taken: 0.605 seconds, Fetched: 5 row(s)
