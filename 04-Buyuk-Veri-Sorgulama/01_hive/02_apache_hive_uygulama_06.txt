@@ -202,12 +202,18 @@ set hive.optimize.bucketmapjoin.sortedmerge=true;
 
 
 
+========================================================================
+							VIEWS 
+========================================================================
 
+5. 
+	view veri tutmaz.
+	Tüm DML geçerli
+	read-only
 
+6. View oluşturma 
 
-
-
-
+create view vw_customers as select * from joindb.customers;
 
 
 

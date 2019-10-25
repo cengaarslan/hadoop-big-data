@@ -1,14 +1,14 @@
 ﻿1. 
 	https://github.com/veribilimiokulu/udemy-hadoop-buyukveri-egitimi/blob/master/06-Veri-Aktarimi/Flume/flumelogs.conf
 	adresine git.  Raw'e tıkla, adres bardan adresi kopyala ve curl ile indir. 
-	Dikkat: Raw'e tıklamadan indirirsen html içerik iner.
+	Dikkat: Raw'e tıklamadan indirmeyiniz.
 	
-	[maria_dev@sandbox-hdp ~]$ curl -O https://raw.githubusercontent.com/veribilimiokulu/udemy-hadoop-buyukveri-egitimi/master/06-Veri-Aktarimi/Flume/flumelogs.conf
+[maria_dev@sandbox-hdp ~]$ curl -O https://raw.githubusercontent.com/veribilimiokulu/udemy-hadoop-buyukveri-egitimi/master/06-Veri-Aktarimi/Flume/flumelogs.conf
 
 	
 	Kontrol:
 		
-		[maria_dev@sandbox-hdp ~]$ cat flumelogs.conf
+[maria_dev@sandbox-hdp ~]$ cat flumelogs.conf
 		# flumelogs.conf: A single-node Flume configuration
 
 		# Name the components on this agent
@@ -42,13 +42,14 @@
 
 	
 
-2. mkdir -p /home/maria_dev/spool
+2. 
+mkdir -p /home/maria_dev/spool
 	komutu ile dizin oluştur.
 	
 	Bu dizin içine atılan dosya, log vb. şeylerin izlenip okunacağı kaynak dizindir.
 	
 2. hdfs dosya sisteminde 
-		[maria_dev@sandbox-hdp ~]$ hdfs dfs -mkdir /user/maria_dev/flume
+[maria_dev@sandbox-hdp ~]$ hdfs dfs -mkdir /user/maria_dev/flume
 		
 		Kontrol:
 		----------
@@ -58,39 +59,46 @@
  
 
 3. flume-server ile akışı başlatma
-	[maria_dev@sandbox-hdp ~]$ cd /usr/hdp/current/flume-server/
-	flume-server diznine geç
+[maria_dev@sandbox-hdp ~]$ cd /usr/hdp/current/flume-server/
+	komutu ile flume-server diznine geç
 	
 
-	[maria_dev@sandbox-hdp flume-server]$ bin/flume-ng agent --conf conf --conf-file /home/maria_dev/flumelogs.conf --name a1 -Dflume.root.logger=INFO,console
+[maria_dev@sandbox-hdp flume-server]$ bin/flume-ng agent --conf conf --conf-file /home/maria_dev/flumelogs.conf --name a1 -Dflume.root.logger=INFO,console
 	komutunu çalıştır.
 	
 4. farklı bir teminalden 
-		/home/maria_dev/spool
-		dizinine 
-		curl -O https://raw.githubusercontent.com/veribilimiokulu/udemy-hadoop-buyukveri-egitimi/master/06-Veri-Aktarimi/Flume/apache_erisim_loglari.txt
+
+cd /home/maria_dev/spool
+
+		dizinine geç ve 
+
+curl -O https://raw.githubusercontent.com/veribilimiokulu/udemy-hadoop-buyukveri-egitimi/master/06-Veri-Aktarimi/Flume/apache_erisim_loglari.txt
 		
 		ile küçük log dosyasını indir.
 		
-5. [maria_dev@sandbox-hdp ~]$ cp apache_erisim_loglari.txt spool/
+5. 
 
-ile monitör edilen dizine log dosyasını kopyala.
-daha sonra diğer terminalde flume'un davranışlarını izle.
+[maria_dev@sandbox-hdp ~]$ cp apache_erisim_loglari.txt spool/
+
+	ile monitör edilen dizine log dosyasını kopyala.
+	daha sonra diğer terminalde flume'un davranışlarını izle.
 
 6. Kaynak dizine göz at ve dosyadaki değişikliği gözle
-	[maria_dev@sandbox-hdp ~]$ ls -l spool/
+[maria_dev@sandbox-hdp ~]$ ls -l spool/
+	
 	total 16
 	-rw-rw-r-- 1 maria_dev maria_dev 4826 Apr 21 17:23 apache_erisim_loglari.txt.COMPLETED
 
 	işlenen dosyanın sonuna.COMPLETED eklendiğini görüyoruz.
 
 7. HDFS hedef dizninden aktarımın olup olmadığını kontrol et. Hedef dizin /user/maria_dev/flume idi.
-	[maria_dev@sandbox-hdp ~]$ hdfs dfs -ls /user/maria_dev/flume
+
+[maria_dev@sandbox-hdp ~]$ hdfs dfs -ls /user/maria_dev/flume
 	Found 1 items
 	drwxr-xr-x   - maria_dev hdfs          0 2019-04-21 17:23 /user/maria_dev/flume/19-04-21
 
 		Daha detaylı görünüm için 
-		[maria_dev@sandbox-hdp ~]$ hdfs dfs -ls /user/maria_dev/flume/19-04-21/1720/00
+[maria_dev@sandbox-hdp ~]$ hdfs dfs -ls /user/maria_dev/flume/19-04-21/1720/00
 		Found 10 items
 		-rw-r--r--   1 maria_dev hdfs       1331 2019-04-21 17:23 /user/maria_dev/flume/19-04-21/1720/00/events-.1555867427674
 		-rw-r--r--   1 maria_dev hdfs       1236 2019-04-21 17:23 /user/maria_dev/flume/19-04-21/1720/00/events-.1555867427675
@@ -104,7 +112,7 @@ daha sonra diğer terminalde flume'un davranışlarını izle.
 		-rw-r--r--   1 maria_dev hdfs        221 2019-04-21 17:24 /user/maria_dev/flume/19-04-21/1720/00/events-.1555867427683
 
 8. Aynı kontrolü Ambari Files View üzerinden de yap.
-	Görmeye çalıştığında bozuk karakterler karşına çıkabilir. Bu hatadan değil. Seq file formatında saklandığındandır.Bu format 
+	Görmeye çalıştığında bozuk karakterler karşına çıkabilir. Bu hatadan değil. Seq file formatında saklandığındandır. Bu format 
 	ekosistemdeki diğer bileşenler tarafından daha kolay okunup işlenebilir.
 
 9. Flume-Server'ın çalıştığı terminali Ctrl+C ile kapat. 
