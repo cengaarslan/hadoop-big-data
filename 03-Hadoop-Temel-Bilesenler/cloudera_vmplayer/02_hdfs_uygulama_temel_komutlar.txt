@@ -1,0 +1,157 @@
+Windows bilgisayarlarda kaç tane disk ortamı var daha iyi anlamak ve kopyalama yapmak açısından WinSCP kurulur.
+
+//// Sanal Makine Lokalinden HDFS'e veri taşıma ///////////////////
+1. 
+ssh  ssh murat@cloudera 
+ile Sandbox'a terminalden bağlanın
+
+2. Sanal makine Linux lokal diskine veri setini indirme:
+2.1 Şuan hangi dizindeyim
+[murat@cloudera ~]$ pwd
+	/home/murat
+                                                                                                                                                         
+	
+2.2. wget ile:
+[murat@cloudera ~]$ wget https://raw.githubusercontent.com/erkansirin78/datasets/master/simple_data.csv
+	
+	
+2.3. Sanal makine linux lokal diskten HDFS'e veri kopyalama:
+	
+[murat@cloudera ~]$ hdfs dfs -put simple_data.csv /user/murat
+	
+	Yüklemeyi kontrol için 
+[murat@cloudera ~]$ hdfs dfs -ls /user/murat
+		Found 2 items
+		drwxr-xr-x   - murat hadoop          0 2019-11-03 22:12 /user/murat/.sparkStaging
+		-rw-r--r--   1 murat hadoop        592 2019-11-11 18:32 /user/murat/simple_data.csv
+
+	
+	YÜKLENEN VERİYİ HDFS TEN OKUMAK İÇİN 
+[murat@cloudera ~]$ hdfs dfs -cat /user/murat/simple_data.csv
+		sirano,isim,yas,meslek,sehir,aylik_gelir
+		1,Cemal,35,Isci,Ankara,3500
+		2,Ceyda,42,Memur,Kayseri,4200
+		3,Timur,30,Müzisyen,Istanbul,9000
+		4,Burcu,29,Pazarlamaci,Ankara,4200
+		5,Yasemin,23,,Bursa,4800
+		6,Ali,33,Memur,Ankara,4250
+		7,Dilek,29,Pazarlamaci,Istanbul,7300
+		8,Murat,31,Müzisyen,Istanbul,12000
+		9,Ahmet,33,Doktor,Ankara,18000
+		10,Muhittin,46,Berber,Istanbul,12000
+		11,Hicaziye,47,Tuhafiyeci,Ankara,4800
+		12,Harun,43,Tornacı,Ankara,4200
+		13,Hakkı,33,Memur,Çorum,3750
+		14,Gülizar,37,Doktor,İzmir,14250
+		15,Şehmuz,41,,Ankara,8700
+		16,Gençay,46,Berber,Ankara,8800
+		16,Gençay,46,Berber,Ankara,8800
+
+	Aynı komutun namenode sunucu adresi kullanılarak çalıştırılması.
+[murat@cloudera ~]$ hdfs dfs -cat hdfs://cloudera.impektra.com:8020/user/murat/simple_data.csv
+
+3. Temel hdfs komutları
+	
+	3.1. Linux için root ne ise hdfs dünyasında hdfs odur.
+	
+	3.2. sanal makine terminalde root kullanıcısına geçmek için 
+[murat@cloudera ~]$ sudo -i
+[sudo] password for murat: Ankara06
+[root@cloudera ~]#
+
+	3.3. Tekrar murat kullanıcısına geçmek için:
+[root@cloudera ~]# exit
+		logout
+
+	3.4. hdfs süper kullanıcısı hdfs adına komut çalıştırma:
+[murat@cloudera ~]$ sudo -u hdfs hdfs dfs -ls /user/murat
+		Found 2 items
+		drwxr-xr-x   - murat hadoop          0 2019-11-03 22:12 /user/murat/.sparkStaging
+		-rw-r--r--   1 murat hadoop        592 2019-11-11 18:32 /user/murat/simple_data.csv
+		
+	
+	
+	3.5. hdfs dizin oluşturma (mkdir)
+[murat@cloudera ~]$ sudo -su hdfs hdfs dfs -mkdir /user/hdfs
+	[sudo] password for murat: Ankara06
+
+	
+	
+	3.6. hdfs boş bir dosya oluşturma (touchz)
+[murat@cloudera ~]$ hdfs dfs -touchz /user/murat/bos_dosya.txt
+
+	Kontrol:
+[murat@cloudera ~]$ hdfs dfs -ls /user/murat
+		Found 3 items
+		drwxr-xr-x   - murat hadoop          0 2019-11-03 22:12 /user/murat/.sparkStaging
+		-rw-r--r--   1 murat hadoop          0 2019-11-11 18:50 /user/murat/bos_dosya.txt
+		-rw-r--r--   1 murat hadoop        592 2019-11-11 18:32 /user/murat/simple_data.csv
+	
+
+	3.7. lokal diskten bir dosya/klasör kopyalamak (put veya copyFromLocal)
+[murat@cloudera ~]$ hdfs dfs -copyFromLocal retail_db /user/murat
+
+	Kontrol
+[murat@cloudera ~]$ hdfs dfs -ls /user/murat
+		Found 4 items
+		drwxr-xr-x   - murat hadoop          0 2019-11-03 22:12 /user/murat/.sparkStaging
+		-rw-r--r--   1 murat hadoop          0 2019-11-11 18:50 /user/murat/bos_dosya.txt
+		drwxr-xr-x   - murat hadoop          0 2019-11-11 18:53 /user/murat/retail_db
+		-rw-r--r--   1 murat hadoop        592 2019-11-11 18:32 /user/murat/simple_data.csv
+
+
+
+	3.8. hdfs'ten lokal diske dosya/klasör kopyalamak (copyToLocal veya get):
+[murat@cloudera ~]$ hdfs dfs -get /user/murat/bos_dosya.txt
+
+	Kontrol:
+[murat@cloudera ~]$ ll
+		total 572
+		-rw-r--r-- 1 murat murat      0 Nov 11 18:56 bos_dosya.txt
+		-rw-rw-r-- 1 murat murat 579785 Nov  3 21:47 postgresql-9.2-1002.jdbc4.jar
+		drwxrwxr-x 2 murat murat    133 Nov  3 20:50 retail_db
+		-rw-rw-r-- 1 murat murat    592 Nov 11 18:31 simple_data.csv	
+	
+	3.9. hdfs'ten hdfs'e dosya kopyalama (cp)
+[murat@cloudera ~]$ hdfs dfs -cp /user/murat/retail_db /user/hdfs
+		cp: Permission denied: user=murat, access=WRITE, inode="/user/hdfs":hdfs:supergroup:drwxr-xr-x	
+		hata aldık. çünkü murat kullanıcısının /user/hdfs diznine yazma yetkisiyok.
+		Süper kullanıcı adı ile deneyelim.
+
+[murat@cloudera ~]$ sudo -su hdfs hdfs dfs -cp /user/murat/retail_db /user/hdfs
+	[sudo] password for murat: Ankara06
+
+	Kontrol:
+[murat@cloudera ~]$ hdfs dfs -ls /user/hdfs
+		Found 1 items
+		drwxr-xr-x   - hdfs supergroup          0 2019-11-11 18:59 /user/hdfs/retail_db
+			
+	3.10. hdfs dosya silme
+[murat@cloudera ~]$ hdfs dfs -rm -r /user/murat/bos_dosya.txt
+		19/11/11 19:44:55 INFO fs.TrashPolicyDefault: Moved: 'hdfs://cloudera.impektra.com:8020/user/murat/bos_dosya.txt' to trash 
+		at: hdfs://cloudera.impektra.com:8020/user/murat/.Trash/Current/user/murat/bos_dosya.txt1573490695279
+		
+		
+	trash'i atlayarak silme 
+[murat@cloudera ~]$ hdfs dfs -rm -r -skipTrash /user/murat/bos_dosya.txt
+		Deleted /user/murat/bos_dosya.txt	
+		
+		
+	3.11. hdfs disk kullanımı (du)
+[murat@cloudera ~]$ sudo -su hdfs hdfs dfs -du /
+		[sudo] password for murat:
+		47579      536941875   /hbase
+		0          0           /tmp
+		560399002  1172935052  /user
+
+	Bunu human readable yapalım
+[murat@cloudera ~]$ sudo -su hdfs hdfs dfs -du -h /
+		46.5 K   512.1 M  /hbase
+		0        0        /tmp
+		534.4 M  1.1 G    /user
+
+
+
+Diğer hdfs komutları için referans:
+https://hadoop.apache.org/docs/r2.7.1/hadoop-project-dist/hadoop-common/FileSystemShell.html#cat
+	

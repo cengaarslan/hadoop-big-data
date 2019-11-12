@@ -1,6 +1,6 @@
 Eski Versiyon HDP Sandbox'a Eriþim
 Hortonworks-Cloudera sitesinde sürekli en güncel sürüm HDP sandboxlar bulunuyor. 
-Þuan 3.X sürümleri mevcut. Kursu 2.6.4 sürüm ile yaptýðýmýz için aþaðýda bu sürüme nasýl ulaþabileceðimiz ile ilgili baðlantý ve ekran görüntüsü bulunuyor.
+Þuan 3.X sürümleri mevcut. Kursu 2.6.5 sürüm ile yaptýðýmýz için aþaðýda bu sürüme nasýl ulaþabileceðimiz ile ilgili baðlantý ve ekran görüntüsü bulunuyor.
 
 Önemli Uyarý: BIOS'tan sanallaþtýrma desteðini açmayý unutmayýnýz.
 

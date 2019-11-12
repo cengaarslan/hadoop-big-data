@@ -1,0 +1,147 @@
+﻿UYGULAMA-1
+=====================================================================================================================================
+Bu uyglamada kendi yazdığımız mapreduce kodları ile wordcount uygulaması yapacağız.
+Uygulama bir dosya içindeki kuryemiş isimlerinden hangisinin kaçar tane tekrarlandığını hesaplayarak 
+sonucu hdfs'e yazacaktır.
+
+
+1.
+Intellij proje oluştur.
+	proje dosyası:
+	03-Hadoop-Temel-Bilesenler\mapreducewordcount
+
+
+2. 
+Mapreduce kodlarını yaz.
+
+	intellij proje pom.xml dosyası:
+	03-Hadoop-Temel-Bilesenler\mapreducewordcount\pom.xml
+
+
+3.
+Intellij üzerinden jar dosyası oluştur.
+	Hazır jar dosyası: 
+	https://github.com/erkansirin78/hadoop-big-data/blob/master/03-Hadoop-Temel-Bilesenler/mapreducewordcount/out/artifacts/mapreduce_wordcount_jar/mapreduce.wordcount.jar
+
+4. jar dosyasını ana makineden sanal makineye kopyala (WinSCP uygulaması kullanılabilir) veya github'dan indir.
+
+[murat@cloudera ~]$ wget https://github.com/erkansirin78/hadoop-big-data/raw/master/03-Hadoop-Temel-Bilesenler/mapreducewordcount/out/artifacts/mapreduce_wordcount_jar/mapreduce.wordcount.jar
+
+	Alternatif olarak komut satırından scp komutu kullanılabilir 
+	scp mapreducewordcount.jar murat@cloudera:
+
+
+5. word count yapılacak text dosyasını hdfs'e kopyala
+
+[murat@cloudera ~]$ wget https://raw.githubusercontent.com/erkansirin78/hadoop-big-data/master/03-Hadoop-Temel-Bilesenler/mapreducewordcount/kaynaklar/kuruyemisler.txt
+
+	Önce hdfs'te bir dizin oluştur
+[murat@cloudera ~]$ hdfs dfs -mkdir /user/murat/kuruyemis
+[murat@cloudera ~]$ hdfs dfs -put kuruyemisler.txt /user/murat/kuruyemis
+
+6. wordcount programını çalıştır 
+[murat@cloudera ~]$ hadoop jar mapreduce.wordcount.jar com.veribilimiokulu.mapreduce.MR2WordCount /user/murat/kuruyemis /user/murat/kuruyemis_out
+	
+	Beklenen çıktı:
+
+		WARNING: Use "yarn jar" to launch YARN applications.
+		19/11/11 22:32:34 INFO client.RMProxy: Connecting to ResourceManager at cloudera.impektra.com/192.168.206.70:8032
+		19/11/11 22:32:35 INFO mapreduce.JobResourceUploader: Disabling Erasure Coding for path: /user/murat/.staging/job_1573499819466_0001
+		19/11/11 22:32:36 INFO input.FileInputFormat: Total input files to process : 1
+		19/11/11 22:32:36 INFO mapreduce.JobSubmitter: number of splits:1
+		19/11/11 22:32:37 INFO Configuration.deprecation: yarn.resourcemanager.system-metrics-publisher.enabled is deprecated. Instead, use yarn.system-metrics-publisher.enabled
+		19/11/11 22:32:37 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_1573499819466_0001
+		19/11/11 22:32:37 INFO mapreduce.JobSubmitter: Executing with tokens: []
+		19/11/11 22:32:37 INFO conf.Configuration: resource-types.xml not found
+		19/11/11 22:32:37 INFO resource.ResourceUtils: Unable to find 'resource-types.xml'.
+		19/11/11 22:32:38 INFO impl.YarnClientImpl: Submitted application application_1573499819466_0001
+		19/11/11 22:32:38 INFO mapreduce.Job: The url to track the job: http://cloudera.impektra.com:8088/proxy/application_1573499819466_0001/
+		19/11/11 22:32:38 INFO mapreduce.Job: Running job: job_1573499819466_0001
+		19/11/11 22:32:53 INFO mapreduce.Job: Job job_1573499819466_0001 running in uber mode : false
+		19/11/11 22:32:53 INFO mapreduce.Job:  map 0% reduce 0%
+		19/11/11 22:33:02 INFO mapreduce.Job:  map 100% reduce 0%
+		19/11/11 22:33:12 INFO mapreduce.Job:  map 100% reduce 100%
+		19/11/11 22:33:13 INFO mapreduce.Job: Job job_1573499819466_0001 completed successfully
+		19/11/11 22:33:14 INFO mapreduce.Job: Counters: 54
+				File System Counters
+						FILE: Number of bytes read=25593
+						FILE: Number of bytes written=711299
+						FILE: Number of read operations=0
+						FILE: Number of large read operations=0
+						FILE: Number of write operations=0
+						HDFS: Number of bytes read=325281
+						HDFS: Number of bytes written=100
+						HDFS: Number of read operations=13
+						HDFS: Number of large read operations=0
+						HDFS: Number of write operations=4
+						HDFS: Number of bytes read erasure-coded=0
+				Job Counters
+						Launched map tasks=1
+						Launched reduce tasks=2
+						Data-local map tasks=1
+						Total time spent by all maps in occupied slots (ms)=5214
+						Total time spent by all reduces in occupied slots (ms)=12962
+						Total time spent by all map tasks (ms)=5214
+						Total time spent by all reduce tasks (ms)=12962
+						Total vcore-milliseconds taken by all map tasks=5214
+						Total vcore-milliseconds taken by all reduce tasks=12962
+						Total megabyte-milliseconds taken by all map tasks=5339136
+						Total megabyte-milliseconds taken by all reduce tasks=13273088
+				Map-Reduce Framework
+						Map input records=1866
+						Map output records=40740
+						Map output bytes=458604
+						Map output materialized bytes=25585
+						Input split bytes=136
+						Combine input records=0
+						Combine output records=0
+						Reduce input groups=7
+						Reduce shuffle bytes=25585
+						Reduce input records=40740
+						Reduce output records=7
+						Spilled Records=81480
+						Shuffled Maps =2
+						Failed Shuffles=0
+						Merged Map outputs=2
+						GC time elapsed (ms)=457
+						CPU time spent (ms)=6950
+						Physical memory (bytes) snapshot=964005888
+						Virtual memory (bytes) snapshot=7798550528
+						Total committed heap usage (bytes)=880279552
+						Peak Map Physical memory (bytes)=501088256
+						Peak Map Virtual memory (bytes)=2590162944
+						Peak Reduce Physical memory (bytes)=245395456
+						Peak Reduce Virtual memory (bytes)=2605359104
+				Shuffle Errors
+						BAD_ID=0
+						CONNECTION=0
+						IO_ERROR=0
+						WRONG_LENGTH=0
+						WRONG_MAP=0
+						WRONG_REDUCE=0
+				File Input Format Counters
+						Bytes Read=325145
+				File Output Format Counters
+						Bytes Written=100
+
+	Hedef dizni bir listeleyelim:
+[murat@cloudera ~]$ hdfs dfs -ls /user/murat/kuruyemis_out
+		Found 3 items
+		-rw-r--r--   1 murat hadoop          0 2019-11-11 22:33 /user/murat/kuruyemis_out/_SUCCESS
+		-rw-r--r--   1 murat hadoop         46 2019-11-11 22:33 /user/murat/kuruyemis_out/part-r-00000
+		-rw-r--r--   1 murat hadoop         54 2019-11-11 22:33 /user/murat/kuruyemis_out/part-r-00001
+		
+	Çıktı birden fazla parçada, hepsini okuyalım.
+[murat@cloudera ~]$ hdfs dfs -cat /user/murat/kuruyemis_out/part*
+		CEVIZ   13020
+		FINDIK  7842
+		KAJU    6186
+		ÜZÜM    7716
+		ANTEP FISTIK    2244
+		YER FISTIĞI     1866
+		ÇIĞ FINDIK      1866
+
+
+
+Uygulama çalışırken ResourceManager UI'den gelişmeler gözlenir.
+

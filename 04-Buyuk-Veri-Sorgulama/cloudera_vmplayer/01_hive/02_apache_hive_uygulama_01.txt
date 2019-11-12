@@ -1,0 +1,159 @@
+﻿3. Hive veri tabanı yaratma
+hive 
+komutu ike hive shell'e bağlanılır.
+
+	3.1. Mevcut veri tabanlarını listeleme:
+hive> show databases;
+		OK
+		default
+		Time taken: 2.716 seconds, Fetched: 1 row(s)
+		
+	3.2. Veri tabanı oluşturma:
+hive> create database if not exists azhadoop;
+		OK
+		Time taken: 0.432 seconds
+	
+	3.3. veri tabanlarını listeleme:
+hive> show databases;
+		OK
+		azhadoop
+		default
+		Time taken: 0.301 seconds, Fetched: 2 row(s)
+	
+	3.4. veri tabanı seçme
+hive> use azhadoop;
+		OK
+		Time taken: 0.053 seconds
+
+	3.5. seçilen veri tabanında tabloları listeleme 
+show tables;
+		OK
+		Time taken: 0.087 seconds
+
+	3.6. hive çıkış:
+hive> exit;	
+	
+
+4. Hive ve Impala karşılaştırma: 
+	Impala Hive'ın Cloudera'daki karşılığı
+	Impala'nın bir avantajı BI tarzındaki sorguları
+	Ayrıca Impala sorgu performansı olarak da daha hızlı
+	Ancak Impala Cloudera ile sınırlı bir araç, Hive daha geniş ve açık bir proje
+	
+5. Beeline ile Hive komut satırına bağlanma:
+[murat@cloudera ~]$ beeline -u jdbc:hive2://cloudera:10000
+		
+		WARNING: Use "yarn jar" to launch YARN applications.
+		SLF4J: Class path contains multiple SLF4J bindings.
+		SLF4J: Found binding in [jar:file:/opt/cloudera/parcels/CDH-6.3.1-1.cdh6.3.1.p0.1470567/jars/log4j-slf4j-impl-2.8.2.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+		SLF4J: Found binding in [jar:file:/opt/cloudera/parcels/CDH-6.3.1-1.cdh6.3.1.p0.1470567/jars/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+		SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+		SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
+		Connecting to jdbc:hive2://cloudera:10000
+		Connected to: Apache Hive (version 2.1.1-cdh6.3.1)
+		Driver: Hive JDBC (version 2.1.1-cdh6.3.1)
+		Transaction isolation: TRANSACTION_REPEATABLE_READ
+		Beeline version 2.1.1-cdh6.3.1 by Apache Hive
+
+
+
+	5.1. veri tabanlarını listeleme:
+0: jdbc:hive2://cloudera:10000> show databases;
+		INFO  : Compiling command(queryId=hive_20191111225230_2a5916c6-665a-414f-a99c-ec9ab270213d): show databases
+		INFO  : Semantic Analysis Completed
+		INFO  : Returning Hive schema: Schema(fieldSchemas:[FieldSchema(name:database_name, type:string, comment:from deserializer)], properties:null)
+		INFO  : Completed compiling command(queryId=hive_20191111225230_2a5916c6-665a-414f-a99c-ec9ab270213d); Time taken: 2.132 seconds
+		INFO  : Executing command(queryId=hive_20191111225230_2a5916c6-665a-414f-a99c-ec9ab270213d): show databases
+		INFO  : Starting task [Stage-0:DDL] in serial mode
+		INFO  : Completed executing command(queryId=hive_20191111225230_2a5916c6-665a-414f-a99c-ec9ab270213d); Time taken: 0.064 seconds
+		INFO  : OK
+		+----------------+
+		| database_name  |
+		+----------------+
+		| azhadoop       |
+		| default        |
+		+----------------+
+		2 rows selected (3.387 seconds)
+
+	5.2. Beeline çıkış:
+!quit veya !q
+
+4. DBeaver Hive Bağlantısı ve Hive üzerinde sorgu çalıştırma
+
+
+7. Kuyruk adı belirterek hive sorgusu çalıştırmak (kuyruk yarn üzerinde tanımlı olmalıdır)
+Sorgu dan önce 
+ jdbc:hive2://localhost:10000> set tez.queue.name=hive;
+
+ Bunu mapreduce için yapamayız. Runtime esnasında mümkün değil. Bu ayarın açılması gerekir.
+
+8. Sorgu:
+0: jdbc:hive2://localhost:10000>  select workclass, COUNT(*) FROM `default`.adult_preprocessed GROUP by workclass;
+
+[Error: Failure while running task:java.lang.IllegalArgumentException: tez.runtime.io.sort.mb 396 should be larger than 0 and should be less than the available task memory (MB):178
+
+hatası alınır.
+Çözüm:
+
+Ambari -> Tez -> Config 
+Filter'a 
+tez.runtime.io.sort.mb
+karşısındaki değeri 170 yaptık 
+Save ettik 
+
+Ambari ana sayfadan restart all required diyoruz.
+
+
+
+9. YARN Resource Manager'dan hive kuyruğundan kaynak alındığı gözlenir.
+
+
+10. Dbeaver üzerinden 
+set tez.queue.name=hive;
+
+select workclass, COUNT(*) FROM `default`.adult_preprocessed GROUP by workclass;
+
+çalışan sorgunun YARN hive kuyruğundan kaynak aldığı gözlemlenir.
+
+
+
+
+
+11.
+
+Mysq veri tabanına bağlama:
+=====================================================
+HDP 2.6.5 Kullananlar:
+mysql -u root -p 
+hortonworks1
+
+HDP 2.6.4 kullananlar doğrudan
+mysql -u root -p 
+hadoop
+
+
+
+mysql root şifresini sıfırlamak
+
+root kullanıcısı ile:
+---------------------
+
+systemctl stop mysqld
+systemctl set-environment MYSQLD_OPTS="--skip-grant-tables --skip-networking"
+systemctl start mysqld
+mysql -u root
+
+mysql shell içinde sırasıyla
+-------------------------------
+
+use mysql;
+update user set authentication_string=PASSWORD("hadoop") where User='root';
+flush privileges;
+quit
+
+
+Bu işlem sonrasında tüm servisleri ve sanal makineyi yeniden başlatmak gerekebilir.
+
+
+
+
